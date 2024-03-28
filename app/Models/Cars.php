@@ -12,7 +12,7 @@ class Cars extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'make', 'model', 'model_year', 'vin'];
+    protected $allowedFields    = ['make', 'model', 'model_year', 'vin'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -25,17 +25,12 @@ class Cars extends Model
 
     // Validation
     protected $validationRules      = [
-        'id'     => 'integer|is_natural_no_zero',
         'make'        => 'required|max_length[50]|string',
         'model'     => 'required|max_length[50]|string',
         'model_year' => 'required|max_length[4]|string',
         'vin' => 'required|max_length[50]|string',
     ];
     protected $validationMessages   = [
-        'id' => [
-            'integer' => 'Must be integer!',
-            'is_unique' => 'Must be unique!',
-        ],
     ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
@@ -56,7 +51,7 @@ class Cars extends Model
 
     protected function checkInsert(array $data)
     {
-        log_message('debug', 'blaa');
+        log_message('warning', 'blaa');
         return $data;
     }
 }

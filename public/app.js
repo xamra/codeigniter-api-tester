@@ -15,7 +15,7 @@ function ApiTester() {
             //console.log(this.queryParameter)
 
             this.httpMethod = 'GET';
-            this.url = 'http://localhost:8080/cars';
+            this.url = window.location.href + 'cars';
             this.formTypes = 'none'
 
         },

@@ -56,13 +56,16 @@ class Cars extends ResourceController
     */
     public function create()
     {
-        if (!$this->request->is("json")) {
+        /*   if (!$this->request->is("json")) {
             return $this->fail("Please provide valid json!");
-        }
+        }*/
 
-        $data = $this->request->getJSON(true);
+        //$data = $this->request->getJSON(true, JSON_THROW_ON_ERROR);
+        $data = $this->request->getJSON();
+        //        print_r($data);
+        //return $data;
 
-        if (!$data) {
+        /* if (!$data) {
             return $this->fail("Please provide valid json!");
         }
 
@@ -74,10 +77,11 @@ class Cars extends ResourceController
                 // return $this->fail($errors, 500);
                 return $this->failValidationErrors($errors);
             }
-        }
+        }*/
 
         try {
-            $car = $this->model->insert($data);
+            $car = $this->model->save($data);
+            //       echo '#' . $car;
             if ($car == false) {
                 return $this->fail("Could not be saved!", 500);
             }
@@ -85,6 +89,15 @@ class Cars extends ResourceController
         } catch (Exception $ex) {
             return $this->fail($ex, 400);
         }
+
+        /*
+        FUNKTIONIERT!
+        $db = \Config\Database::connect();
+
+        $sql = 'INSERT INTO cars (make, model, model_year, vin) VALUES ("Ford","Mustang","2024","ABCDEFG")';
+        $db->query($sql);
+        echo '#'.$db->affectedRows();
+        */
     }
 
 
@@ -100,6 +113,10 @@ class Cars extends ResourceController
 
         $data = $this->request->getJSON(true);
 
+        /*  print_r($data);
+
+        echo "'".$id."'";*/
+
         if (!$data) {
             return $this->fail("Please provide valid json!");
         }
@@ -114,7 +131,7 @@ class Cars extends ResourceController
         }
 
         try {
-            $car = $this->model->update($id, $data);
+            $car = $this->model->update((int)$id, $data);
             if ($car == false) {
                 return $this->fail("Data could not be updated!", 500);
             }
@@ -133,6 +150,11 @@ class Cars extends ResourceController
      */
     public function delete($id = "")
     {
-        return $this->respond(null, 403, "Forbidden!");
+        $deleted = $this->model->delete($id);
+        if ($deleted) {
+            return $this->respond($deleted, 200, "OK");
+        } else {
+            return $this->fail("Data could not be deleted!", 500);
+        }
     }
 }
